@@ -18,11 +18,24 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: dev-alex
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+
+      - name: Extract Branch Name
+        run: |
+          branch_name=$(echo "${{ github.event.pull_request.base.ref }}" | cut -d '/' -f 3)
+          environment_name=$(echo "$branch_name" | cut -d '-' -f 2)
+          echo "PR merged into branch: $branch_name"
+          echo "$environment_name" >> $GITHUB_OUTPUT
+        id: extract_branch
+      
+      - name: Print API Key
+        run: |
+            echo " ${{ secrets.API_KEY }}"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -34,7 +47,4 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-      - name: Extract Branch Name
-        run: |
-            branch_name=$(echo "${{ github.event.pull_request.base.ref }}" | cut -d '/' -f 3)
-            echo "PR merged into branch: $branch_name"
+
