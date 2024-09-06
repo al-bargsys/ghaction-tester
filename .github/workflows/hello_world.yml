@@ -33,3 +33,8 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Extract Branch Name
+        run: |
+            branch_name=$(echo "${{ github.event.pull_request.head.ref }}" | cut -d '/' -f 3)
+            echo "PR merged into branch: $branch_name"
