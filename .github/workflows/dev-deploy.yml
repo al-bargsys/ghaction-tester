@@ -1,0 +1,31 @@
+name: Branch-Based Deployment
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - 'dev-*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get branch name
+        run: |
+          branch_name=$(echo "${{ github.event.pull_request.head.ref }}" | cut -d '/' -f 3)
+          environment_name=$(echo "$branch_name" | cut -d '-' -f 2)
+      
+      - name: debug
+        run: |
+            echo "we made it here"
+
+      - name: Get API key from secrets
+        run: |
+          api_key=$(echo "${{ secrets.$environment_name-apikey }}")
+
+      - name: Print a variable
+        run: |
+            echo "The value of my_variable is: ${{ secrets.$environment_name-apikeye }}"
