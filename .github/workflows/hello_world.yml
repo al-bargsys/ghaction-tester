@@ -34,7 +34,7 @@ jobs:
       
       - name: Print API Key
         run: |
-            echo " ${{ secrets.API_KEY }}"
+            echo " ${{ vars.API_VAR }}"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
